@@ -4,18 +4,59 @@
   margin: 0px auto;
   padding: 0 16px 16px;
   flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .toolbar {
   margin-bottom: 16px;
   display: flex;
+  /* КЛЮЧ: justify-content: space-between; дозволить елементам розсунутись */
   justify-content: space-between;
-  align-items: center;
+  align-items: center; /* Вирівнює по центру вертикально */
   padding: 16px 0;
   background-color: #f8f9fa;
   border-bottom: 1px solid #dee2e6;
+  flex-wrap: wrap; /* Дозволяє елементам переноситися на новий рядок */
+  gap: 10px; /* Відступ між елементами в toolbar */
 }
 
+/* Контейнер для SearchBox (буде зліва) */
+.searchBoxContainer {
+  order: 1; /* Вказуємо порядок, щоб він був першим (зліва) */
+  /* min-width: 150px; Додайте, якщо потрібно контролювати мінімальну ширину */
+}
+
+/* Контейнер для пагінації (буде по центру) */
+.paginationContainer {
+  display: flex;
+  justify-content: center; /* Центрує вміст пагінації всередині цього контейнера */
+  align-items: center;
+  flex-grow: 1; /* КЛЮЧ: дозволяє цьому контейнеру "розростатися" і займати
+                   весь доступний простір, штовхаючи інші елементи,
+                   і таким чином, центрує пагінацію */
+  order: 2; /* Вказуємо порядок, щоб він був другим (в центрі) */
+}
+
+/* Кнопка "Create note +" (буде справа) */
+.createNoteButton {
+  padding: 6px 12px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #0d6efd;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  white-space: nowrap; /* Запобігає переносу тексту кнопки */
+  order: 3; /* Вказуємо порядок, щоб він був третім (справа) */
+}
+
+.createNoteButton:hover {
+  background-color: #0b5ed7;
+}
+
+/* Залишаємо існуючий клас .button, якщо він використовується в інших місцях */
 .button {
   padding: 6px 12px;
   font-size: 16px;
@@ -29,4 +70,32 @@
 
 .button:hover {
   background-color: #0b5ed7;
+}
+
+/* Медіа-запит для малих екранів */
+@media (max-width: 768px) {
+  .toolbar {
+    flex-direction: column; /* На малих екранах розташуємо елементи в стовпець */
+    align-items: center; /* Центруємо всі елементи в toolbar */
+    justify-content: center; /* Центруємо всі елементи по горизонталі */
+  }
+
+  .searchBoxContainer {
+    width: 100%; /* Пошук займає всю ширину */
+    order: 1; /* Пошук зверху */
+    text-align: center; /* Центруємо сам SearchBox, якщо він менший за 100% */
+  }
+
+  .paginationContainer {
+    width: 100%; /* Пагінація займає всю ширину */
+    order: 2; /* Пагінація по центру після пошуку */
+    justify-content: center; /* Переконатися, що пагінація всередині контейнера теж по центру */
+    margin-top: 10px; /* Додайте відступ, якщо потрібно */
+  }
+
+  .createNoteButton {
+    width: 100%; /* Кнопка займає всю ширину */
+    order: 3; /* Кнопка знизу */
+    margin-top: 10px; /* Додайте відступ, якщо потрібно */
+  }
 }

@@ -47,15 +47,29 @@ export default function NotesClient({
   return (
     <>
       <div className={css.app}>
-        {/* -------HEADER ELEMENTS--------- */}
+        {/* -------HEADER ELEMENTS (TOOLBAR)--------- */}
 
         <div className={css.toolbar}>
-          <div>
+          {/* Контейнер для SearchBox (зліва) */}
+          <div className={css.searchBoxContainer}>
             <SearchBox value={inputValue} onSearch={handleSearchChange} />
           </div>
+
+          {/* Контейнер для пагінації (по центру) */}
+          <div className={css.paginationContainer}>
+            {totalPages > 0 && ( // Залишаємо умову рендерингу пагінації
+              <Pagination
+                totalPages={totalPages}
+                currentPage={currentPage}
+                onPageChange={setCurrentPage}
+              />
+            )}
+          </div>
+
+          {/* Кнопка "Create note +" (справа) */}
           <button
             onClick={() => setIsModalOpen(true)}
-            className={css.addbutton}
+            className={css.createNoteButton} // Змінено на createNoteButton, як обговорювалось раніше
           >
             Create note +
           </button>
@@ -64,13 +78,6 @@ export default function NotesClient({
         {/* -------NOTELIST--------- */}
 
         <NoteList notes={notes.data?.notes ?? []} />
-        {totalPages > 0 && (
-          <Pagination
-            totalPages={totalPages}
-            currentPage={currentPage}
-            onPageChange={setCurrentPage}
-          />
-        )}
 
         {/* -------NOTE MODAL--------- */}
 
