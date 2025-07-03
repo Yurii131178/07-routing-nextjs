@@ -9,16 +9,6 @@ interface ModalProps {
 }
 
 const Modal = ({ children, onClose }: ModalProps) => {
-  // const router = useRouter();
-
-  // const handleClose = useCallback(() => {
-  //   if (onClose) {
-  //     onClose();
-  //   } else {
-  //     router.back();
-  //   }
-  // }, [onClose, router]);
-
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) onClose();
   };
