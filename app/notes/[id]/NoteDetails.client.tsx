@@ -1,49 +1,51 @@
 'use client';
-
+import css from './NoteDetails.module.css';
+import { useParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { fetchNoteById } from '@/lib/api';
-import css from './NoteDetails.module.css';
+import Loader from '@/components/Loader/Loader';
+import ErrorMessage from '@/components/ErrorMessage/ErrorMessage';
 
-interface NoteDetailsClientProps {
-  noteId: number;
-}
+const NoteDetailsClient = () => {
+  const { id } = useParams();
 
-export default function NoteDetailsClient({ noteId }: NoteDetailsClientProps) {
   const {
     data: note,
+    isError,
     isLoading,
-    error,
   } = useQuery({
-    queryKey: ['note', noteId],
-    queryFn: () => fetchNoteById(noteId),
+    queryKey: ['note', id],
+    queryFn: () => fetchNoteById(Number(id)),
     refetchOnMount: false,
-    enabled: !isNaN(noteId),
   });
 
-  if (isNaN(noteId)) {
-    return <p className={css.content}>Invalid note ID</p>;
-  }
+  if (isLoading) return <Loader />;
 
-  if (isLoading) {
-    return <p className={css.content}>Loading, please wait...</p>;
-  }
+  if (isError) return <ErrorMessage />;
 
-  if (error || !note) {
-    return <p className={css.content}>Something went wrong.</p>;
-  }
+  if (!note) return <p>Note not found</p>;
+
+  const date = new Date(note.createdAt);
+  const formattedDate = date.toLocaleString('uk-UA', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
 
   return (
     <div className={css.container}>
+      <p>{note.tag}</p>
       <div className={css.item}>
         <div className={css.header}>
           <h2>{note.title}</h2>
           <button className={css.editBtn}>Edit note</button>
         </div>
         <p className={css.content}>{note.content}</p>
-        <p className={css.date}>
-          {new Date(note.createdAt).toLocaleDateString('en-GB')}
-        </p>
+        <p className={css.date}>{formattedDate}</p>
       </div>
     </div>
   );
-}
+};
+export default NoteDetailsClient;
